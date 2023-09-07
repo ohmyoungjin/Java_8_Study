@@ -28,7 +28,7 @@ public class FunctionalInterfaceProduct {
         for (final Product product : products) {
             // products 의 리스트를 가지고 for each 로 사용하면서 n 번째 인수를 뜻하는 객체는 product 이다
             //if(product.getPrice().compareTo(new BigDecimal("20")) >=0 ) { // 내부에서 계속 BigDecimal 클레스가 생성 되므로 변수로 빼기 !
-            if(product.getPrice().compareTo(twenty) >=0 ) {
+            if (product.getPrice().compareTo(twenty) >= 0) {
                 result.add(product);
             }
         }
@@ -45,14 +45,14 @@ public class FunctionalInterfaceProduct {
         Predicate<Product> isAnonymous = new Predicate<Product>() {
             @Override
             public boolean test(Product product) {
-                if (product.getPrice().compareTo(twenty) >=0) {
+                if (product.getPrice().compareTo(twenty) >= 0) {
                     return true;
                 }
                 return false;
             }
         };
         //System.out.println("isAnonymous : " +filter(products, isAnonymous));
-        List<Product> filterList  = filter(products, isAnonymous);
+        List<Product> filterList = filter(products, isAnonymous);
         //System.out.println("isAnonymous : " + filterList);
         List<Product> discountResult = new ArrayList<>(); // 결과 값 닮을 리스트 선언
 
@@ -63,15 +63,16 @@ public class FunctionalInterfaceProduct {
                 (Product product) -> new DiscountedProduct(product.getId(), product.getName(), product.getPrice().multiply(new BigDecimal("0.5"))));
         System.out.println("expensive products :  " + expensiveProducts);
         System.out.println("discountedProducts :  " + discountedProducts);
-        Predicate<DiscountedProduct> lessThanOrEqualTo30 = discountedProduct -> discountedProduct.getPrice().compareTo(new BigDecimal("30")) <= 0;
+        Predicate<Product> lessThanOrEqualTo30 = discountedProduct -> discountedProduct.getPrice().compareTo(new BigDecimal("30")) <= 0;
         System.out.println("discounted products (<= $30)" +
-            filter(discountedProducts, lessThanOrEqualTo30)
+                filter(discountedProducts, lessThanOrEqualTo30)
         );
 
         System.out.println("discounted products (<= $30)" +
-            filter(products, (Product)lessThanOrEqualTo30)
+                filter(products, lessThanOrEqualTo30)
         );
     }
+
     //처음에 이렇게 선언했음 .. 여기서는 어떤 형을 받을지 모르기 때문에
     //제네릭 메서드로 선언을 해줘야 함
     //이렇게 쓰려면 class 자체에 제네릭 클레스로 선언이 되어야 한다.
@@ -79,13 +80,15 @@ public class FunctionalInterfaceProduct {
     //변경 후 => 제네릭 메소드의 <T> 이 부분은 지역함수 개념으로 이해 하면 된다. 함수가 호출 되면서 어떤 값을 반환 할 것인지 정해줄 수 있다.
     //짧막 팁 => static 의 제네릭 타입과 class 에 선언된 제네릭 타입은 같지 않다 !
     //스테틱이 먼저 메모리에 적재되기 때문에 인스턴스 변수와 스테틱 변수는 공유하지 않는다.
-    private static <T> List<T> filter(List<T> list, Predicate<T> isPositive) {
+    //와일드카드 사용 => 와일드 카드 사용으로 변경하지 않으면 제네릭 타입에서 선언된 변수로만 사용이 가능하므로
+    //자바의 다형성에 위배가 된다 이를 수정 하기 위해 super 및 extends 로 변경해서 다형성을 사용하게 끔 변경해줌 ! 중요하다 **
+    private static <T> List<T> filter(List<T> list, Predicate<? super T> isPositive) {
         //함수 내부에서 반환 해줄 List 생성
         List<T> result = new ArrayList<>();
         //내가 받아서 사용할 list 자체가 제네릭 타입으로 넘어왔기 때문에 밑에 for each 에 사용할 list 도 선언을 제네릭 타입으로 해준다 ***
         for (T listValue : list) {
             //분기 처리 할 부분 람다를 사용해야 하므로 어떤 람다 분기처리식을 받을지 Predicate<T> isPositive 이 부분으로 파라미터로 받아준다
-            if(isPositive.test(listValue)) {
+            if (isPositive.test(listValue)) {
                 result.add(listValue);
             }
         }
