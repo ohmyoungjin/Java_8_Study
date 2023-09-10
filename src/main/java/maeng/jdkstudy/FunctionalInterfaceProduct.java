@@ -14,12 +14,17 @@ import java.util.function.Predicate;
 
 public class FunctionalInterfaceProduct {
     public static void main(String[] args) {
+        Product productA = new Product(1L, "A", new BigDecimal("10.00"));
+        Product productB = new Product(2L, "B", new BigDecimal("55.50"));
+        Product productC = new Product(3L, "C", new BigDecimal("17.45"));
+        Product productD = new Product(4L, "D", new BigDecimal("20.00"));
+        Product productE = new Product(5L, "E", new BigDecimal("110.99"));
         final List<Product> products = Arrays.asList(
-                new Product(1L, "A", new BigDecimal("10.00")),
-                new Product(2L, "B", new BigDecimal("55.50")),
-                new Product(3L, "C", new BigDecimal("17.45")),
-                new Product(4L, "D", new BigDecimal("20.00")),
-                new Product(5L, "E", new BigDecimal("110.99"))
+                productA,
+                productB,
+                productC,
+                productD,
+                productE
         );
         //** 람다로 사용하기 전 방식 **
         List<Product> result = new ArrayList<>(); // 결과 값 닮을 리스트 선언
@@ -71,7 +76,29 @@ public class FunctionalInterfaceProduct {
         System.out.println("discounted products (<= $30)" +
                 filter(products, lessThanOrEqualTo30)
         );
+
+        final List<BigDecimal> prices = map(products, product -> product.getPrice());
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (final BigDecimal price : prices) {
+            total = total.add(price);
+        }
+        System.out.println("total : " + total);
+
+        BigDecimal newTotal = total(products, product -> product.getPrice());
+        System.out.println("newTotal : " + newTotal);
+
+        BigDecimal discountProductTotal = total(discountedProducts, discountedProduct -> discountedProduct.getPrice());
+        System.out.println("discountProductTotal : " + discountProductTotal);
+
+        Order order = new Order(1L, "on-1234", Arrays.asList(
+                new OrderedItem(1L, productA, 2),
+                new OrderedItem(2L, productB, 1),
+                new OrderedItem(3L, productC, 10)
+        ));
+        System.out.println("order total : " + order.totalPrice());
     }
+
 
     //처음에 이렇게 선언했음 .. 여기서는 어떤 형을 받을지 모르기 때문에
     //제네릭 메서드로 선언을 해줘야 함
@@ -102,22 +129,56 @@ public class FunctionalInterfaceProduct {
         }
         return result;
     }
-}
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-class Product {
-    private Long id;
-    private String name;
-    private BigDecimal price;
-
-}
-
-@ToString(callSuper = true)
-class DiscountedProduct extends Product {
-    public DiscountedProduct(Long id, String name, BigDecimal price) {
-        super(id, name, price);
+    private static <T> BigDecimal total(List<T> list, Function<T, BigDecimal> mapper) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (final T t : list) {
+            total = total.add(mapper.apply(t));
+        }
+        return total;
     }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    static class Product {
+        private Long id;
+        private String name;
+        private BigDecimal price;
+
+    }
+
+    @ToString(callSuper = true)
+    static class DiscountedProduct extends Product {
+        public DiscountedProduct(Long id, String name, BigDecimal price) {
+            super(id, name, price);
+        }
+    }
+
+    @AllArgsConstructor
+    @Data
+    static class OrderedItem {
+        private Long id;
+        private Product product;
+        private int quantity;
+
+        public BigDecimal getItemTotal() {
+            return product.getPrice().multiply(new BigDecimal(quantity));
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Order {
+        private Long id;
+        private String orderNumber;
+        private List<OrderedItem> items;
+
+        public BigDecimal totalPrice() {
+            return total(items, item -> item.getItemTotal());
+        }
+    }
+
 }
+
 
