@@ -1,4 +1,4 @@
-package maeng.jdkstudy;
+package maeng.jdkstudy.functionalinterface;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

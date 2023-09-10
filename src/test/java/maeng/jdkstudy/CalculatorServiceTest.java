@@ -1,5 +1,6 @@
 package maeng.jdkstudy;
 
+import maeng.jdkstudy.functionalinterface.*;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

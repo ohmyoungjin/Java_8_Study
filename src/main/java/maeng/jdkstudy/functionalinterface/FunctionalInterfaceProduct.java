@@ -1,4 +1,4 @@
-package maeng.jdkstudy;
+package maeng.jdkstudy.functionalinterface;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

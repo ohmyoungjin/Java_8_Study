@@ -1,4 +1,4 @@
-package maeng.jdkstudy;
+package maeng.jdkstudy.functionalinterface;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

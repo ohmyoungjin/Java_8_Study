@@ -1,4 +1,4 @@
-package maeng.jdkstudy;
+package maeng.jdkstudy.functionalinterface;
 
 public class OopAnotherExample {
 
