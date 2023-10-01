@@ -2,7 +2,6 @@ package maeng.jdkstudy.stream;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import maeng.jdkstudy.functionalinterface.FunctionalInterfaceProduct;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -13,12 +12,12 @@ public class StreamExamples4 {
 
     public static void main(String[] args) {
 
-        Product productA = new Product(1L, "A", new BigDecimal("10.00"));
-        Product productB = new Product(2L, "B", new BigDecimal("55.50"));
-        Product productC = new Product(3L, "C", new BigDecimal("17.45"));
-        Product productD = new Product(4L, "D", new BigDecimal("20.00"));
-        Product productE = new Product(5L, "E", new BigDecimal("110.99"));
-        final List<Product> products = Arrays.asList(
+        Product2 productA = new Product2(1L, "A", new BigDecimal("10.00"));
+        Product2 productB = new Product2(2L, "B", new BigDecimal("55.50"));
+        Product2 productC = new Product2(3L, "C", new BigDecimal("17.45"));
+        Product2 productD = new Product2(4L, "D", new BigDecimal("20.00"));
+        Product2 productE = new Product2(5L, "E", new BigDecimal("110.99"));
+        final List<Product2> products = Arrays.asList(
                 productA,
                 productB,
                 productC,
@@ -89,7 +88,7 @@ class Product {
 @Data
 class OrderedItem {
     private Long id;
-    private Product product;
+    private Product2 product;
     private int quantity;
 
     //수량에 따른 총합
