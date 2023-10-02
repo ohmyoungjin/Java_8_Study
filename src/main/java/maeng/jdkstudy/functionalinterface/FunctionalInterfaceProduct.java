@@ -65,7 +65,7 @@ public class FunctionalInterfaceProduct {
         List<Product> expensiveProducts = filter(products, product -> product.getPrice().compareTo(new BigDecimal("50")) > 0);
 
         List<DiscountedProduct> discountedProducts = map(expensiveProducts,
-                (Product product) -> new DiscountedProduct(product.getId(), product.getName(), product.getPrice().multiply(new BigDecimal("0.5"))));
+                (product) -> new DiscountedProduct(product.getId(), product.getName(), product.getPrice().multiply(new BigDecimal("0.5"))));
         System.out.println("expensive products :  " + expensiveProducts);
         System.out.println("discountedProducts :  " + discountedProducts);
         Predicate<Product> lessThanOrEqualTo30 = discountedProduct -> discountedProduct.getPrice().compareTo(new BigDecimal("30")) <= 0;
