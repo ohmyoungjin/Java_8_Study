@@ -43,6 +43,8 @@ public class HigherOrderFunctionExamples {
         System.out.println(
             filterMap(list, i -> i + "#", i -> i>2)
         );
+
+        System.out.println(testSum(test()));
     }
 
 
@@ -62,5 +64,13 @@ public class HigherOrderFunctionExamples {
             }
         }
         return result;
+    }
+
+    private static int testSum(int a) {
+        return a + 1;
+    }
+
+    private static int test() {
+        return 1;
     }
 }
