@@ -2,10 +2,16 @@ package maeng.jdkstudy.methodreference;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * MethodReference
+ * 메소드 레퍼런스는 함수형 인터페이스의 추상 메소드와 메소드 시그니처가 일치하면 사용할 수 있으며,
+ * 반환 값의 타입은 함수형 인터페이스의 반환 타입과 일치해야 합니다
+ */
 public class MethodReferenceExamples {
 
     public static void main(String[] args) {
@@ -21,12 +27,11 @@ public class MethodReferenceExamples {
                 .sorted(BigDecimal::compareTo)
                 .collect(Collectors.toList())
         );
-
+        
         final String targetString = "c";
         System.out.println(
             Arrays.asList("a", "b", "c", "d")
                     .stream()
-                    //.anyMatch(x -> x.equals("c"))
                     .anyMatch(targetString::equals)
         );
 
@@ -104,6 +109,8 @@ public class MethodReferenceExamples {
         for (final Function<Integer, String> f : fsBoth) {
             System.out.println(f.apply(7));
         }
+        Comparator<Integer> returnThree = MethodReferenceExamples::returnThree;
+        System.out.println(returnThree.compare(10,20));
     }
 
     private static String doubleThenToString(int i) {
@@ -126,6 +133,11 @@ public class MethodReferenceExamples {
         // 두 번째 타입 같은 경우 Method Reference 로 사용하는 함수의 return 값으로 받는다. ex)return String.valueOf(i * 2);
         return MethodReferenceExamples::doubleThenToString;
     }
+
+    private static int returnThree(int x, int y) {
+        return x + y;
+    }
+
 }
 
 class BigDecimalUtil {
